@@ -1,0 +1,19 @@
+# Like run.testscript but for the symlink_handle_create_close test whose
+# on-disk workspace template contains a symlink (existing1/testlink). The
+# dist meta-operation materializes symlinks as regular files, so the
+# template as shipped in the package distribution is broken (KernelTest's
+# workspace comparison then sees testlink differ). Recreate the template in
+# a scratch home directory with the symlink restored and point
+# KERNELTEST_LLFIO_HOME at it.
+#
+# Note: cleanup of everything in the working directory is left to the
+# trailing wildcard (the per-command registrations would run after it and
+# fail to find what it has already removed).
+#
+mkdir --no-cleanup -p home/test/tests;
+cp --no-cleanup -r $string($src_root)/test/tests/symlink_handle_create_close \
+   home/test/tests/symlink_handle_create_close;
+rm home/test/tests/symlink_handle_create_close/existing1/testlink;
+ln --no-cleanup -s testfile.txt \
+   home/test/tests/symlink_handle_create_close/existing1/testlink;
+env KERNELTEST_LLFIO_HOME="$~/home" -- $* >| 2>| &***

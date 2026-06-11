@@ -34,9 +34,13 @@ for src: cxx{*}
   section_handle_create_close/{cxx hxx}{*} \
   ../hxx{test_kernel_decl} $libs testscript{run}
 
+# The symlink test's workspace template contains a symlink which dist
+# materializes as a regular file, so it gets its own testscript that
+# recreates the template (see run-symlink.testscript for details).
+#
 ./: exe{test-symlink_handle_create_close}: \
   symlink_handle_create_close/{cxx hxx}{*} \
-  ../hxx{test_kernel_decl} $libs testscript{run}
+  ../hxx{test_kernel_decl} $libs testscript{run-symlink}
 
 # The kernel-runner on-disk workspace templates (made part of the package
 # so that they end up in the distribution).
@@ -60,4 +64,13 @@ for src: cxx{*}
 exe{extended_attributes utils}: test = false
 
 if ($cxx.target.class == 'windows')
+{
   cxx.poptions += -D_WIN32_WINNT=0x601
+
+  # Symlink creation on Windows requires either Developer Mode or the
+  # SeCreateSymbolicLink privilege, neither of which can be assumed (and
+  # the testscript ln builtin falls back to copying, breaking the
+  # workspace template that run-symlink.testscript recreates).
+  #
+  exe{test-symlink_handle_create_close}: test = false
+}
