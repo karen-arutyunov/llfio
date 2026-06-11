@@ -20,29 +20,13 @@ tested snapshots of the develop branch). The packages follow these snapshots
 using pre-release snapshot versions of the upstream `2.0` API version
 (`2.0.0-a.0.z`).
 
-The `libllfio` package depends on `libquickcpplib` and `liboutcome`, and the
-`libllfio-tests` package additionally on `libkerneltest`, which are provided
-by the sibling `build2` package repositories for `quickcpplib`, `outcome`,
-and `kerneltest`. During development these dependencies are satisfied from
-those projects initialized in the same build configuration. For example:
+The development setup for libllfio uses the standard bdep-based workflow. For example:
 
 ```
-git clone --recurse-submodules .../quickcpplib.git
-git clone --recurse-submodules .../outcome.git
-git clone --recurse-submodules .../kerneltest.git
 git clone --recurse-submodules .../llfio.git
+cd llfio
 
-cd quickcpplib
-bdep init -C ../packaging-gcc @gcc cc config.cxx=g++
-
-cd ../outcome
-bdep init -A ../packaging-gcc @gcc
-
-cd ../kerneltest
-bdep init -A ../packaging-gcc @gcc
-
-cd ../llfio
-bdep init -A ../packaging-gcc @gcc
+bdep init -C @gcc cc config.cxx=g++
 bdep update
 bdep test
 ```

@@ -1,19 +1,14 @@
 : 1
 summary: llfio project repository
 
-# During local development the libquickcpplib, liboutcome, and libkerneltest
-# dependencies are satisfied from the quickcpplib, outcome, and kerneltest
-# projects initialized in the same build configuration. Uncomment (and
-# adjust, if necessary) once those package repositories are published.
-#
-#:
-#role: prerequisite
-#location: https://github.com/build2-packaging/quickcpplib.git#master
-#
-#:
-#role: prerequisite
-#location: https://github.com/build2-packaging/outcome.git#master
-#
-#:
-#role: prerequisite
-#location: https://github.com/build2-packaging/kerneltest.git#master
+:
+role: prerequisite
+location: https://github.com/wroyca/quickcpplib.git#main
+
+:
+role: prerequisite
+location: https://github.com/wroyca/outcome.git#main
+
+:
+role: prerequisite
+location: https://github.com/wroyca/kerneltest.git#main
