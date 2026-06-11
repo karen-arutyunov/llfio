@@ -59,7 +59,9 @@ trivial_vector
 utils
 test-directory_handle_create_close
 test-directory_handle_enumerate
+test-extended_attributes
 test-file_handle_create_close
 test-map_handle_create_close
 test-section_handle_create_close
 test-symlink_handle_create_close
+test-utils
