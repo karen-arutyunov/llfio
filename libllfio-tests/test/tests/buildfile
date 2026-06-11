@@ -1,0 +1,63 @@
+import libs  = libllfio%lib{llfio}
+import libs += libkerneltest%lib{kerneltest}
+
+# Each top-level translation unit is a self-contained test executable (the
+# unit test framework bundled with quickcpplib supplies main()).
+#
+for src: cxx{*}
+  ./: exe{$name($src)}: $src ../hxx{test_kernel_decl} $libs testscript{run}
+
+# The kernel-runner tests additionally use on-disk workspace templates
+# which KernelTest's filesystem workspace hook locates via the
+# KERNELTEST_LLFIO_HOME environment variable (set in testscript{run}).
+#
+# Note: the executables are prefixed with test- to avoid clashing with the
+# kernel directories of the same names.
+#
+./: exe{test-directory_handle_create_close}: \
+  directory_handle_create_close/{cxx hxx}{*} \
+  ../hxx{test_kernel_decl} $libs testscript{run}
+
+./: exe{test-directory_handle_enumerate}: \
+  directory_handle_enumerate/{cxx hxx}{*} \
+  ../hxx{test_kernel_decl} $libs testscript{run}
+
+./: exe{test-file_handle_create_close}: \
+  file_handle_create_close/{cxx hxx}{*} \
+  ../hxx{test_kernel_decl} $libs testscript{run}
+
+./: exe{test-map_handle_create_close}: \
+  map_handle_create_close/{cxx hxx}{*} \
+  ../hxx{test_kernel_decl} $libs testscript{run}
+
+./: exe{test-section_handle_create_close}: \
+  section_handle_create_close/{cxx hxx}{*} \
+  ../hxx{test_kernel_decl} $libs testscript{run}
+
+./: exe{test-symlink_handle_create_close}: \
+  symlink_handle_create_close/{cxx hxx}{*} \
+  ../hxx{test_kernel_decl} $libs testscript{run}
+
+# The kernel-runner on-disk workspace templates (made part of the package
+# so that they end up in the distribution).
+#
+./: directory_handle_create_close/file{existing0/** existing1/**} \
+    directory_handle_enumerate/file{existing/**}                  \
+    file_handle_create_close/file{existing0/** existing1/**}      \
+    symlink_handle_create_close/file{existing0/** existing1/**}
+
+# These tests fail due to environment specifics rather than llfio bugs, so
+# build but don't run them:
+#
+# - extended_attributes expects newly-created files to carry no extended
+#   attributes, which is not the case on SELinux-enabled systems (such as
+#   Fedora) where every file gets a security.selinux attribute.
+#
+# - utils checks the process memory accounting against exact page counts
+#   which varies with the kernel version and configuration (upstream notes
+#   the same for Linux > 4.12).
+#
+exe{extended_attributes utils}: test = false
+
+if ($cxx.target.class == 'windows')
+  cxx.poptions += -D_WIN32_WINNT=0x601

@@ -1,0 +1,1 @@
+../../../upstream/test/tests/handle_adapter_xor.cpp

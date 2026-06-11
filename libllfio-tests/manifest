@@ -1,0 +1,17 @@
+: 1
+name: libllfio-tests
+version: 2.0.0-a.0.z
+type: tests
+language: c++
+project: llfio
+summary: Low-level file i/o and filesystem C++ library tests
+license: Apache-2.0 OR BSL-1.0
+description-file: README.md
+url: https://github.com/ned14/llfio
+package-url: https://github.com/build2-packaging/llfio
+package-email: packaging@build2.org ; Mailing list.
+depends: * build2 >= 0.18.0
+depends: * bpkg >= 0.18.0
+depends: libllfio == $
+depends: libkerneltest >= 1.0.0-a.0.1
+requires: c++17

@@ -22,3 +22,9 @@
 #
 libllfio/include/llfio   symlink=dir
 libllfio/include/kvstore symlink=dir
+libllfio-tests/test/tests/directory_handle_create_close  symlink=dir
+libllfio-tests/test/tests/directory_handle_enumerate     symlink=dir
+libllfio-tests/test/tests/file_handle_create_close       symlink=dir
+libllfio-tests/test/tests/map_handle_create_close        symlink=dir
+libllfio-tests/test/tests/section_handle_create_close    symlink=dir
+libllfio-tests/test/tests/symlink_handle_create_close    symlink=dir

@@ -1,0 +1,6 @@
+# Run each test in its own scratch working directory. The kernel-runner
+# tests locate their on-disk workspace templates via KERNELTEST_LLFIO_HOME
+# (expecting the <home>/test/tests/<test-name>/<template> layout of this
+# package's source directory).
+#
+env KERNELTEST_LLFIO_HOME=$string($src_root) -- $* >| 2>| &***
