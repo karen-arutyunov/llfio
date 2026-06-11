@@ -16,4 +16,4 @@ depends: * bpkg >= 0.18.0
 depends: libquickcpplib >= 0.0.1-a.0.1
 depends: liboutcome >= 2.2.10-a.0.1
 tests: libllfio-tests == $
-requires: c++17
+requires: c++20

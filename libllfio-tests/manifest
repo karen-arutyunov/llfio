@@ -14,4 +14,4 @@ depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
 depends: libllfio == $
 depends: libkerneltest >= 1.0.0-a.0.1
-requires: c++17
+requires: c++20

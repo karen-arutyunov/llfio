@@ -3,9 +3,14 @@
 #cxx.internal.scope = current
 
 # Upstream requires C++ 17 or later (CMake: cxx_std_17; <filesystem> is
-# required).
+# required). We, however, require C++ 20: in C++ 17 mode llfio emulates
+# char8_t with a custom class type and instantiates std::char_traits for
+# it, which libc++ 18 and later no longer support (the std::char_traits
+# base template has been removed).
 #
-cxx.std = 17
+# https://github.com/ned14/llfio/issues/144#issuecomment-2458449028
+#
+cxx.std = 20
 
 using cxx
 

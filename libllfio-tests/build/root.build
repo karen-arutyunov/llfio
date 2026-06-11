@@ -3,9 +3,10 @@
 #cxx.internal.scope = current
 
 # Upstream requires C++ 17 or later (CMake: cxx_std_17; <filesystem> is
-# required).
+# required). We, however, require C++ 20 to match libllfio (see its
+# build/root.build for the rationale).
 #
-cxx.std = 17
+cxx.std = 20
 
 using cxx
 
