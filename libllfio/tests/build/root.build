@@ -1,0 +1,18 @@
+# Upstream requires C++ 17 or later (CMake: cxx_std_17; <filesystem> is
+# required).
+#
+cxx.std = 17
+
+using cxx
+
+hxx{*}: extension = hpp
+ixx{*}: extension = ipp
+cxx{*}: extension = cpp
+
+# Every exe{} in this subproject is by default a test.
+#
+exe{*}: test = true
+
+# The test target for cross-testing (running tests under Wine, etc).
+#
+test.target = $cxx.target

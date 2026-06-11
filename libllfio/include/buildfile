@@ -1,0 +1,22 @@
+# The bundled ntkernel-error-category and wg14_signals submodule trees are
+# restricted to their header payloads (referenced by llfio's headers; note
+# that the wg14_signals detail/impl/*.c.ipp and *.ipp.ipp files are matched
+# by ixx{} since their final extension is .ipp). This corresponds to the
+# upstream installed header set (see upstream cmake/headers.cmake).
+#
+pub_hdrs = {hxx ixx h}{**                                      \
+                       -llfio/ntkernel-error-category/**       \
+                       -llfio/wg14_signals/**}                 \
+           llfio/ntkernel-error-category/include/{hxx ixx}{**} \
+           llfio/wg14_signals/include/{hxx ixx h}{**}
+
+./: $pub_hdrs
+
+# Install into, say, /usr/include/ recreating subdirectories (the public
+# headers are included as <llfio/...>, <llfio.hpp>, and <kvstore/...>).
+#
+{hxx ixx h}{*}:
+{
+  install         = include/
+  install.subdirs = true
+}

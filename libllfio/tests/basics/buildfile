@@ -1,0 +1,3 @@
+import libs = libllfio%lib{llfio}
+
+exe{driver}: {hxx ixx txx cxx}{**} $libs testscript{**}

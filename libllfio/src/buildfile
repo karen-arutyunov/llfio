@@ -1,0 +1,79 @@
+import intf_libs  = libquickcpplib%lib{quickcpplib}
+import intf_libs += liboutcome%lib{outcome}
+
+# Public headers.
+#
+pub = [dir_path] ../include/
+
+include $pub
+
+pub_hdrs = $($pub/ pub_hdrs)
+
+lib{llfio}: $pub/{$pub_hdrs}
+
+windows = ($cxx.target.class == 'windows')
+
+# The library is built from the single upstream translation unit. On Windows
+# additionally compile the bundled ntkernel-error-category translation unit
+# into the library (upstream links the equivalent ntkernel-error-category::
+# sl/dl libraries there).
+#
+lib{llfio}: cxx{llfio}
+lib{llfio}: $pub/llfio/ntkernel-error-category/src/cxx{ntkernel_category}: \
+  include = $windows
+lib{llfio}: $intf_libs
+
+# Build options.
+#
+# Note: LLFIO_HEADERS_ONLY must be left at its default when compiling the
+# library itself (LLFIO_SOURCE plus LLFIO_STATIC_LINK/LLFIO_DYN_LINK select
+# the compiled-library code paths, matching the upstream llfio_sl/llfio_dl
+# targets). LLFIO_INCLUDE_STORAGE_PROFILE matches upstream's private define.
+#
+src_pfx_inc = [dir_path] $src_root/include/
+
+cxx.poptions =+ "-I$src_pfx_inc"
+cxx.poptions += -DLLFIO_SOURCE=1 -DLLFIO_INCLUDE_STORAGE_PROFILE=1
+
+obja{*}: cxx.poptions += -DLLFIO_STATIC_LINK=1
+objs{*}: cxx.poptions += -DLLFIO_DYN_LINK=1
+
+if $windows
+{
+  # The ntkernel-error-category category implementation is linked into the
+  # library itself (no separate DLL), hence _STATIC for both variants.
+  #
+  cxx.poptions += "-I$src_pfx_inc/llfio/ntkernel-error-category/include" \
+                  -D_WIN32_WINNT=0x601 -DNTKERNEL_ERROR_CATEGORY_STATIC=1
+}
+else
+  cxx.libs += -pthread
+
+if ($cxx.target.system == 'freebsd')
+  cxx.libs += -lutil
+
+# Export options.
+#
+lib{llfio}:
+{
+  cxx.export.poptions = "-I$src_pfx_inc" -DLLFIO_HEADERS_ONLY=0
+  cxx.export.libs = $intf_libs
+}
+
+liba{llfio}: cxx.export.poptions += -DLLFIO_STATIC_LINK=1
+libs{llfio}: cxx.export.poptions += -DLLFIO_DYN_LINK=1
+
+if! $windows
+  lib{llfio}: cxx.export.libs += -pthread
+
+if ($cxx.target.system == 'freebsd')
+  lib{llfio}: cxx.export.libs += -lutil
+
+# For pre-releases use the complete version to make sure they cannot
+# be used in place of another pre-release or the final version. See
+# the version module for details on the version.* variable values.
+#
+if $version.pre_release
+  lib{llfio}: bin.lib.version = "-$version.project_id"
+else
+  lib{llfio}: bin.lib.version = "-$version.major.$version.minor"

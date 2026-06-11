@@ -1,0 +1,19 @@
+: 1
+name: libllfio
+version: 2.0.0-a.0.z
+language: c++
+project: llfio
+summary: Low-level file i/o and filesystem C++ library
+license: Apache-2.0 OR BSL-1.0
+topics: file i/o, filesystem
+description-file: README.md
+package-description-file: PACKAGE-README.md
+url: https://github.com/ned14/llfio
+package-url: https://github.com/build2-packaging/llfio
+package-email: packaging@build2.org ; Mailing list.
+depends: * build2 >= 0.18.0
+depends: * bpkg >= 0.18.0
+depends: libquickcpplib >= 0.0.1-a.0.1
+depends: liboutcome >= 2.2.10-a.0.1
+tests: libllfio-tests == $
+requires: c++17
