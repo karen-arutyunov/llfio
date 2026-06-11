@@ -43,8 +43,21 @@ if $windows
   # The ntkernel-error-category category implementation is linked into the
   # library itself (no separate DLL), hence _STATIC for both variants.
   #
-  cxx.poptions += "-I$src_pfx_inc/llfio/ntkernel-error-category/include" \
-                  -D_WIN32_WINNT=0x601 -DNTKERNEL_ERROR_CATEGORY_STATIC=1
+  ntkernel_poptions = "-I$src_pfx_inc/llfio/ntkernel-error-category/include" \
+                      -D_WIN32_WINNT=0x601 -DNTKERNEL_ERROR_CATEGORY_STATIC=1
+
+  cxx.poptions += $ntkernel_poptions
+
+  # The ntkernel_category translation unit is compiled in the include/
+  # directory (where its source lives) rather than in this scope, so the
+  # above scope-level options don't reach it. Pass what it needs (its own
+  # include directory and the configuration macros) directly.
+  #
+  $pub/llfio/ntkernel-error-category/src/obja{ntkernel_category}: \
+    cxx.poptions += $ntkernel_poptions
+
+  $pub/llfio/ntkernel-error-category/src/objs{ntkernel_category}: \
+    cxx.poptions += $ntkernel_poptions
 }
 else
   cxx.libs += -pthread
