@@ -3,12 +3,12 @@ summary: llfio project repository
 
 :
 role: prerequisite
-location: https://github.com/wroyca/quickcpplib.git#main
+location: https://github.com/karen-arutyunov/quickcpplib.git#main
 
 :
 role: prerequisite
-location: https://github.com/wroyca/outcome.git#main
+location: https://github.com/karen-arutyunov/outcome.git#main
 
 :
 role: prerequisite
-location: https://github.com/wroyca/kerneltest.git#main
+location: https://github.com/karen-arutyunov/kerneltest.git#main
