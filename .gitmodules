@@ -1,3 +1,3 @@
 [submodule "upstream"]
 	path = upstream
-	url = https://github.com/ned14/llfio.git
+	url = https://github.com/karen-arutyunov/kerneltest-upstream.git
